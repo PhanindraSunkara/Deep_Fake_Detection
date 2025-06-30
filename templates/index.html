@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deepfake Detection</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, #f6f8ff 0%, #e9ecfd 100%);
+            min-height: 100vh;
+            color: #2c3e50;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            backdrop-filter: blur(10px);
+        }
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-align: center;
+            font-weight: 600;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        .upload-section {
+            text-align: center;
+            border: 2px dashed #764ba2;
+            padding: 40px;
+            border-radius: 15px;
+            margin: 30px 0;
+            transition: all 0.3s ease;
+            background: rgba(118, 75, 162, 0.02);
+        }
+        .upload-section:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+        }
+        input[type="file"] {
+            display: none;
+        }
+        .file-label {
+            display: inline-block;
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            margin-bottom: 20px;
+        }
+        .file-label:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        .form-center {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+        #fileName {
+            margin: 10px 0;
+            color: #666;
+            font-size: 0.9em;
+        }
+        button {
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        button:hover {
+            opacity: 1;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        #videoPreview {
+            max-width: 100%;
+            margin: 20px auto;
+            border-radius: 15px;
+            display: none; /* Hide by default */
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            max-height: 400px;
+            width: auto;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+        }
+        #videoPreview.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        #loading {
+            display: none;
+            margin-top: 30px;
+            font-size: 1.2em;
+            color: #764ba2;
+            text-align: center;
+        }
+        .loading-bar {
+            width: 100%;
+            height: 4px;
+            background: #eee;
+            border-radius: 2px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+        .loading-bar::after {
+            content: '';
+            display: block;
+            width: 40%;
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            animation: loading 1.5s infinite ease-in-out;
+        }
+        @keyframes loading {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(250%); }
+        }
+    </style>
+    <script>
+        function showLoading() {
+            document.getElementById('loading').style.display = 'block';
+            return true;
+        }
+        
+        function previewVideo(input) {
+            const video = document.getElementById('videoPreview');
+            const fileName = document.getElementById('fileName');
+            if (input.files && input.files[0]) {
+                const file = input.files[0];
+                fileName.textContent = file.name;
+                const url = URL.createObjectURL(file);
+                video.src = url;
+                video.style.display = 'block';
+                // Add small delay to trigger animation
+                setTimeout(() => {
+                    video.classList.add('visible');
+                }, 50);
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Deepfake Detection System</h1>
+        <div class="upload-section">
+            <form action="/" method="post" enctype="multipart/form-data" onsubmit="return showLoading()" class="form-center">
+                <label class="file-label">
+                    Choose Video File
+                    <input type="file" name="video" accept="video/*" required onchange="previewVideo(this)">
+                </label>
+                <div id="fileName"></div>
+                <button type="submit">Analyze Video</button>
+            </form>
+        </div>
+        <video id="videoPreview" controls></video>
+        <div id="loading">
+            <div>Analyzing video for deepfake detection...</div>
+            <div class="loading-bar"></div>
+        </div>
+    </div>
+</body>
+</html>
