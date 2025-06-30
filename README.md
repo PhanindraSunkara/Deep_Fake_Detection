@@ -91,6 +91,11 @@ If the average score > 0.5 → FAKE, else → REAL
 
 📈 Total FAKE videos so far: 5
 
+## 📸 Output
+
+Below is an example output of the system after analyzing a video:
+
+![Deepfake Detection Output](uploads/IMG-20250630-WA0000.jpg)
 ---
 
 ## 🤝 Contributing
